@@ -33,7 +33,7 @@ import { LayoutService } from '../service/layout.service';
                         />
                     </g>
                 </svg>
-                <span>SAKAI</span>
+                <span>El Pepe</span>
             </a>
         </div>
 
@@ -72,10 +72,15 @@ import { LayoutService } from '../service/layout.service';
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>
+                    <div> 
+                        <!-- Queda pendiente terminar el logout -->
+                        <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
+                        <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                    </div>
                 </div>
             </div>
         </div>

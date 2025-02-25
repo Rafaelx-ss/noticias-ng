@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -59,7 +60,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                     ¿No tienes una cuenta?  <p-button label="Resistrate" severity="primary" text routerLink="/auth/register" />
                                 </span>
                             </div>
-                            <p-button label="Iniciar sesión" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Iniciar sesión" styleClass="w-full" (onClick)="onLogin()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -69,9 +70,17 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 })
 export class Login {    
     email: string = '';
-
     password: string = '';
-
     checked: boolean = false;
     
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) {}
+
+    onLogin() {
+        if (this.authService.login(this.email, this.password)) {
+            this.router.navigate(['/']);
+        }
+    }
 }

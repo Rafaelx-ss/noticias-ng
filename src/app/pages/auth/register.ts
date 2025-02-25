@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-register',
@@ -53,7 +54,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary mb-4">
                                     ¿Ya tienes una cuenta?  <p-button label="Iniciar sesión" severity="primary" text routerLink="/auth/login" />
                                 </span>                            </div>
-                            <p-button label="Registrarse" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Registrarse" styleClass="w-full" (onClick)="onRegister()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -63,9 +64,19 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 })
 export class Register {    
     name: string = '';
-    
     email: string = '';
-
     password: string = '';
     
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) {}
+
+    onRegister() {
+        // Aquí implementarías la lógica real de registro
+        if (this.name && this.email && this.password) {
+            this.authService.login(this.email, this.password); // Después del registro exitoso
+            this.router.navigate(['/']);
+        }
+    }
 }
