@@ -3,6 +3,7 @@ import { Documentation } from './documentation/documentation';
 import { Crud } from './crud/crud';
 import { Empty } from './empty/empty';
 import { authGuard } from './guards/auth.guard';
+import { Userscrud } from './userscrud/userscrud';
 
 export default [
     { 
@@ -13,6 +14,11 @@ export default [
     { 
         path: 'crud', 
         component: Crud,
+        canActivate: [authGuard]
+    },
+    { 
+        path: 'userscrud', 
+        component: Userscrud,
         canActivate: [authGuard]
     },
     { 
