@@ -26,9 +26,16 @@ export class AuthService {
   
   constructor(private http: HttpClient) {
     // Verificar si hay un token almacenado al iniciar
+    this.checkAuthStatus();
+  }
+
+  private checkAuthStatus() {
     const token = localStorage.getItem('token');
     if (token) {
+      // Aquí podrías agregar una validación adicional del token si es necesario
       this.isAuthenticated.next(true);
+    } else {
+      this.isAuthenticated.next(false);
     }
   }
 
@@ -69,9 +76,11 @@ export class AuthService {
     }
   }
 
-  
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
     this.isAuthenticated.next(false);
   }
 
