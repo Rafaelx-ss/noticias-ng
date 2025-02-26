@@ -79,8 +79,10 @@ export class Login {
     ) {}
 
     onLogin() {
-        if (this.authService.login(this.email, this.password)) {
-            this.router.navigate(['/']);
-        }
+        this.authService.login(this.email, this.password).then((isLoggedIn) => {
+            if (isLoggedIn) {
+                this.router.navigate(['/']);
+            }
+        });
     }
 }

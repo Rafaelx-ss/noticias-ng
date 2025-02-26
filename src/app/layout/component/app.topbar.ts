@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
+import { MenuModule } from 'primeng/menu';
+import { AuthService } from '../../pages/service/auth.service';
+
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, MenuModule],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -78,8 +81,7 @@ import { LayoutService } from '../service/layout.service';
                     </button>
                     <div> 
                         <!-- Queda pendiente terminar el logout -->
-                        <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
-                        <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                        <p-menu #menu [popup]="true" [model]="options"></p-menu>
                     </div>
                 </div>
             </div>
@@ -87,9 +89,24 @@ import { LayoutService } from '../service/layout.service';
     </div>`
 })
 export class AppTopbar {
-    items!: MenuItem[];
+    constructor(
+        public layoutService: LayoutService,
+        private authService: AuthService,
+        private router: Router
+    ) {}
 
-    constructor(public layoutService: LayoutService) {}
+
+    options = [
+        { label: 'Ver mi perfil', icon: 'pi pi-fw pi-user' },
+        { label: 'logout', icon: 'pi pi-fw pi-sign-out', command: () => this.exit() }
+    ];
+
+    exit() {
+        this.authService.logout();
+        this.router.navigate(['/auth/login']);
+    }
+
+    items: MenuItem[] = [];
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));

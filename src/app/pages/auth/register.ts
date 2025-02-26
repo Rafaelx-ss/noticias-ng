@@ -75,8 +75,11 @@ export class Register {
     onRegister() {
         // Aquí implementarías la lógica real de registro
         if (this.name && this.email && this.password) {
-            this.authService.login(this.email, this.password); // Después del registro exitoso
-            this.router.navigate(['/']);
+            this.authService.register(this.name, this.email, this.password).then((isRegistered) => {
+                if (isRegistered) {
+                    this.router.navigate(['/auth/login']);
+                }
+            });
         }
     }
 }

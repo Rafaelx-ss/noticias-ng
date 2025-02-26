@@ -1,5 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { backend } from '../../../context/endpoints';
+
+interface AuthResponse {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    user: {
+      id: number;
+      name: string;
+      email: string;
+    };
+    token: string;
+    expires_in: number;
+  };
+}
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +24,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private isAuthenticated = new BehaviorSubject<boolean>(false);
   
-  constructor() {
+  constructor(private http: HttpClient) {
     // Verificar si hay un token almacenado al iniciar
     const token = localStorage.getItem('token');
     if (token) {
@@ -15,14 +32,44 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): boolean {
-    // Aquí implementarías tu lógica real de autenticación
-    // Por ahora solo simularemos un login exitoso
-    localStorage.setItem('token', 'dummy-token');
-    this.isAuthenticated.next(true);
-    return true;
+  async login(email: string, password: string): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<AuthResponse>(`${backend}/api/auth/login`, { email, password })
+      );
+
+      if (response.success) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id', response.data.user.id.toString());
+        localStorage.setItem('name', response.data.user.name);
+        localStorage.setItem('email', response.data.user.email);
+        this.isAuthenticated.next(true);
+        return true;
+      }
+      if (response.status === 401 && response.message === "Credenciales inválidas") {
+        return false;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
   }
 
+  async register(name: string, email: string, password: string): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<AuthResponse>(`${backend}/api/auth/register`, { name: name, email: email, password: password })
+      );
+      if (response.success) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  
   logout() {
     localStorage.removeItem('token');
     this.isAuthenticated.next(false);
@@ -31,4 +78,4 @@ export class AuthService {
   isLoggedIn() {
     return this.isAuthenticated.value;
   }
-} 
+}
