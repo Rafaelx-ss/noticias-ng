@@ -8,11 +8,14 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../service/auth.service';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { UserService } from '../service/user.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, ConfirmDialogModule, ToastModule],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
@@ -66,22 +69,40 @@ import { AuthService } from '../service/auth.service';
                 </div>
             </div>
         </div>
-    `
+
+        <p-confirmdialog [style]="{ width: '450px'}" />
+        <p-toast />
+    `,
+    providers: [MessageService, UserService, ConfirmationService]
 })
 export class Login {    
     email: string = '';
     password: string = '';
     checked: boolean = false;
-    
+
     constructor(
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private userService: UserService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
     ) {}
 
     onLogin() {
-        this.authService.login(this.email, this.password).then((isLoggedIn) => {
-            if (isLoggedIn) {
-                this.router.navigate(['/']);
+        this.authService.login(this.email, this.password).then((response) => {
+            if(response.success){
+                this.messageService.add({
+                    severity: 'success',
+                    detail: 'Inicio de sesión exitoso, redirigiendo...',
+                });
+                setTimeout(() => {
+                    this.router.navigate(['/pages/userscrud']);
+                }, 3000);
+            }else{
+            this.messageService.add({   
+                    severity: 'error',
+                    detail: 'Hubo un error al iniciar sesión (' + response.error.message + ')',
+                });
             }
         });
     }

@@ -21,7 +21,7 @@ export const publicGuard = () => {
 
   if (authService.isLoggedIn()) {
     // Si está autenticado, redirigir a la página principal
-    router.navigate(['/']);
+    router.navigate(['/pages/userscrud']);
     return false;
   }
 

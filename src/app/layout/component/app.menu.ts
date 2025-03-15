@@ -23,10 +23,6 @@ export class AppMenu {
         if (!this.showModules) {
             this.model = [
                 {
-                    label: 'Home',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-                },
-                {
                     label: 'Pages',
                     icon: 'pi pi-fw pi-briefcase',
                     routerLink: ['/pages'],
@@ -35,11 +31,6 @@ export class AppMenu {
                             label: 'Crud de usuarios',
                             icon: 'pi pi-fw pi-user',
                             routerLink: ['/pages/userscrud']
-                        },
-                        {
-                            label: 'Landing',
-                            icon: 'pi pi-fw pi-globe',
-                            routerLink: ['/landing']
                         },
                     ]
                 },

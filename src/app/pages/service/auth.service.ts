@@ -39,7 +39,7 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<boolean> {
+  async login(email: string, password: string): Promise<AuthResponse | any> {
     try {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(`${backend}/api/auth/login`, { email, password })
@@ -51,14 +51,13 @@ export class AuthService {
         localStorage.setItem('name', response.data.user.name);
         localStorage.setItem('email', response.data.user.email);
         this.isAuthenticated.next(true);
-        return true;
+
+        return response;
       }
-      if (response.status === 401 && response.message === "Credenciales inválidas") {
-        return false;
-      }
-      return false;
+      
+      return response;
     } catch (error) {
-      return false;
+      return error;
     }
   }
 
