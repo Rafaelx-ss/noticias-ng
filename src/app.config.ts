@@ -7,6 +7,7 @@ import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
+    //Se genera
     providers: [
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch()),
