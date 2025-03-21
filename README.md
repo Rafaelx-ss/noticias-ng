@@ -1,59 +1,86 @@
-# Sakai19
+# Noticias API
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+Este proyecto es un backend para una plataforma de noticias desarrollado con Laravel.
 
-## Development server
+## Requisitos previos
 
-To start a local development server, run:
+Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
 
-```bash
-ng serve
-```
+- PHP >= 8.1
+- Composer
+- MySQL o PostgreSQL
+- Laravel 10
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Instalación
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Clona el repositorio e instala las dependencias:
 
 ```bash
-ng generate --help
+git clone https://github.com/tu-usuario/noticias-api.git
+cd noticias-api
+composer install
 ```
 
-## Building
-
-To build the project run:
+Copia el archivo de entorno y configura tu base de datos:
 
 ```bash
-ng build
+cp .env.example .env
+php artisan key:generate
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Edita el archivo `.env` para configurar la base de datos y luego ejecuta las migraciones:
 
 ```bash
-ng test
+php artisan migrate --seed
 ```
 
-## Running end-to-end tests
+## Servidor de desarrollo
 
-For end-to-end (e2e) testing, run:
+Para iniciar el servidor de desarrollo, ejecuta:
 
 ```bash
-ng e2e
+php artisan serve
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Esto iniciará el servidor en `http://127.0.0.1:8000/`.
 
-## Additional Resources
+## Rutas principales
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+El backend expone las siguientes rutas para gestionar noticias:
+
+- `GET /api/noticias` - Obtener todas las noticias
+- `GET /api/noticias/{id}` - Obtener una noticia específica
+- `POST /api/noticias` - Crear una nueva noticia
+- `PUT /api/noticias/{id}` - Actualizar una noticia
+- `DELETE /api/noticias/{id}` - Eliminar una noticia
+
+## Pruebas
+
+Para ejecutar las pruebas, usa:
+
+```bash
+php artisan test
+```
+
+## Despliegue
+
+Para generar una versión optimizada del proyecto, ejecuta:
+
+```bash
+php artisan optimize
+```
+
+Asegúrate de configurar correctamente tu entorno de producción y base de datos antes del despliegue.
+
+## Colaboradores
+
+- **[Rafaelx-ss](https://github.com/Rafaelx-ss)**
+- **[JosePK0](https://github.com/JosePK0)**
+- **[KevDom0317](https://github.com/KevDom0317)**
+- **[blackgroxy](https://github.com/Gu1ll3rmo)**
+
+## Recursos adicionales
+
+- [Documentación de Laravel](https://laravel.com/docs)
+- [Composer](https://getcomposer.org/)
+
